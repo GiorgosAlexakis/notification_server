@@ -1,0 +1,35 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/Looper2074/notification_server/notify";
+package notify;
+
+service Notifier {
+    rpc Notify (stream Order) returns (OrderNotifyResponse);
+    rpc Subscribe (Subscriber) returns (stream OrderNotification);
+}
+
+enum OrderOperationType {
+    INIT_ORDER = 0;
+    CANCEL_ORDER = 1;
+}
+
+message OrderNotifyResponse {
+    string message = 1;
+}
+
+message Order {
+    string product = 1;
+    uint32 userID = 2;
+    OrderOperationType operation = 3;
+    google.protobuf.Timestamp timestamp = 4;
+}
+
+message OrderNotification {
+    string message = 1;
+    google.protobuf.Timestamp timestamp = 3;
+}
+
+message Subscriber {
+    uint32 subscriberID = 1;
+}
